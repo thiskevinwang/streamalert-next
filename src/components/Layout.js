@@ -1,6 +1,62 @@
+import { useRouter } from "next/router";
+
+const VERSIONS = ["latest", "v0.5.1", "v0.4.0"];
+
+const semver =
+  /^v([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$/i;
+
 export default function Layout({ children }) {
+  const { asPath, query, pathname, basePath, push } = useRouter();
+  const version = query.slug?.[0] === "version" ? query.slug?.[1] : "latest";
+
   return (
     <>
+      <pre>
+        {JSON.stringify({ asPath, query, pathname, basePath }, null, 2)}
+      </pre>
+      Version:&nbsp;
+      <select
+        onChange={(e) => {
+          const ver = e.target.value;
+          console.log({ ver });
+          if (ver === version) return;
+
+          if (ver === "latest" && version !== "latest") {
+            const slug = query.slug.slice(2);
+            push("/docs/[[...slug]]/", { asPath: "/docs/" + slug.join("/") });
+            return;
+          }
+          // "asPath": "/docs/alternatives",
+          // "query": {
+          //   "slug": [
+          //     "alternatives"
+          //   ]
+          // },
+          // "pathname": "/docs/[[...slug]]",
+          if (ver !== "latest") {
+            if (query.slug) {
+              // clean "version" and "the version"
+              const cleanSlug = query.slug.filter(
+                (e) => e !== "version" && !semver.test(e)
+              );
+              const url = `/docs/version/${ver}/${cleanSlug.join("/")}`;
+              console.log("pushing: ", url);
+              push(url);
+            } else {
+              const url = `/docs/version/${ver}/`;
+              console.log("pushing: ", url);
+              push(url);
+            }
+          }
+        }}
+        value={version}
+      >
+        {VERSIONS.map((v) => (
+          <option key={v} value={v}>
+            {v}
+          </option>
+        ))}
+      </select>
       <div className="wrapper">{children}</div>
       <style jsx>{`
         .wrapper {
@@ -41,9 +97,9 @@ export default function Layout({ children }) {
         }
 
         code {
-          font-family: 'Menlo';
+          font-family: "Menlo";
         }
       `}</style>
     </>
-  )
+  );
 }

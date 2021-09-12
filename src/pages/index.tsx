@@ -17,10 +17,13 @@ export default function Index({ docs }) {
         {docs.map((file) => (
           <li key={file.filePath}>
             <Link
-              as={`/docs/${file.filePath.replace(/\.mdx?$/, "")}`}
-              href={`/docs/[slug]`}
+              as={`/docs/${file.filePath
+                .replace(/\.mdx?$/, "")
+                .replace(/\.rst$/, "")}`}
+              // href={{ pathname: `/docs/[[...slug]]` }}
+              href={`/docs/[[...slug]]`}
             >
-              <a>{file.data.title}</a>
+              <a>{file.content.split("\n")[0]}</a>
             </Link>
           </li>
         ))}
