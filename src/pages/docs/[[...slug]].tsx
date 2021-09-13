@@ -17,6 +17,8 @@ import Layout from "../../components/Layout";
 import { docsFilePaths, DOCS_PATH } from "../../utils/mdxUtils";
 import { SerializeOptions } from "next-mdx-remote/dist/types";
 
+import fetchFile from "../../data/fetchFile";
+
 const mdxOptions: SerializeOptions["mdxOptions"] = {
   remarkPlugins: [],
   rehypePlugins: [],
@@ -56,9 +58,33 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
 
     const version = slug[1];
     slug = slug.slice(2);
+    const expression = `${version}:website/content/docs/${slug.join("/")}.mdx`;
+    console.log({ expression });
 
-    const remoteSource = "SOME REMOTE CONTENT FIX ME";
-    const { content, data } = matter(remoteSource);
+    const remoteSource = await fetchFile({
+      owner: "hashicorp",
+      name: "waypoint",
+      expression: expression,
+    });
+
+    console.warn(remoteSource.rateLimit);
+
+    let { content, data } = matter(
+      remoteSource.repository?.object?.text || "NOTHING FOUND..."
+    );
+
+    // sanitize
+    const COMMANDS = `(/commands/version/${version}/`;
+    const DOCS = `(/docs/version/${version}/`;
+    const PLUGINS = `(/plugins/version/${version}/`;
+    content = content.replace(/\(\/commands\//g, COMMANDS);
+    content = content.replace(/\(commands\//g, COMMANDS);
+    content = content.replace(/\(\/docs\//g, DOCS);
+    content = content.replace(/\(docs\//g, DOCS);
+    content = content.replace(/\(\/plugins\//g, PLUGINS);
+    content = content.replace(/\(plugins\//g, PLUGINS);
+
+    console.log(content);
 
     const source = await serialize(content, {
       // Optionally pass remark/rehype plugins

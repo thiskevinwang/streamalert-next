@@ -5,7 +5,7 @@ const VERSIONS = ["latest", "v0.5.1", "v0.4.0"];
 const semver =
   /^v([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$/i;
 
-export default function Layout({ children }) {
+const VersionSelect = () => {
   const { asPath, query, pathname, basePath, push } = useRouter();
   const version = query.slug?.[0] === "version" ? query.slug?.[1] : "latest";
 
@@ -57,6 +57,15 @@ export default function Layout({ children }) {
           </option>
         ))}
       </select>
+    </>
+  );
+};
+
+export default function Layout({ children }) {
+  return (
+    <>
+      <VersionSelect />
+
       <div className="wrapper">{children}</div>
       <style jsx>{`
         .wrapper {
