@@ -3,7 +3,8 @@ name: Dispatch
 on:
   repository_dispatch:
     types: 
-      - foobar
+      - dispatch_foo
+      - dispatch_bar
 
 jobs:
   say_hello:
