@@ -13,7 +13,8 @@ jobs:
   say_hello:
     runs-on: ubuntu-latest
     outputs:
-      list: ${{ fromJson(github.event.client_payload.list) }}
+      list: '["array", "of", "things"]'
+      # list: ${{ fromJson(github.event.client_payload.list) }}
     steps:
       - name: 'Checkout ${{ github.event.client_payload.foo }}'
         uses: actions/checkout@v1
