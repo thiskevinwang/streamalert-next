@@ -12,10 +12,8 @@ on:
 jobs:
   say_hello:
     runs-on: ubuntu-latest
-    # outputs:
-    #   list:
-    #     description: 'The sum of the inputs'
-    #     value: ${{ github.event.client_payload.list }}
+    outputs:
+      list: ${{ github.event.client_payload.list }}
     steps:
       - name: 'Checkout ${{ github.event.client_payload.foo }}'
         uses: actions/checkout@v1
@@ -28,6 +26,6 @@ jobs:
     needs: say_hello
     strategy:
       matrix:
-        list: ${{ github.event.client_payload.list }}
+        list: ${{ needs.say_hello.outputs.list }}
     steps:
       - run: echo ${{ matrix.display }}
