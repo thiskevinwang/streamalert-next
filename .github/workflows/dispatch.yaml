@@ -7,6 +7,7 @@ on:
       - dispatch_bar
       - 'manifest-change::Waypoint'
       - 'manifest-change::Terraform'
+      - 'manifest-change::*'
 
 jobs:
   say_hello:
