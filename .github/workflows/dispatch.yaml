@@ -9,7 +9,8 @@ jobs:
   say_hello:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - name: 'Checkout ${{ github.event.client_payload.foo }}'
+        uses: actions/checkout@v1
       - run: 'echo "field: ${{ github.event.client_payload.foo }}"'
       - run: 'echo "payload: ${{ toJson(github.event.client_payload) }}"'
       - run: echo baz
