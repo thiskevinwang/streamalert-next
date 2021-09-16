@@ -35,6 +35,6 @@ jobs:
     strategy:
     # Error when evaluating 'strategy' for job 'my_matrix'. (Line: 30, Col: 15): Unexpected value '["array", "of", "things"]'
       matrix:
-        list: ${{ needs.say_hello.outputs.list }}
+        list: ${{ needs.say_hello.outputs.output1 }}
     steps:
       - run: echo ${{ matrix.display }}
