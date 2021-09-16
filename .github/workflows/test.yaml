@@ -10,7 +10,7 @@ jobs:
   sync-manifest:
     runs-on: ubuntu-latest
     steps:
-      - name: "Checkout: ${{ github.event.client_payload.repo }}"
+      - name: "Checkout: ${{ github.event.client_payload.repo }} @ ${{ github.event.client_payload.ref || 'default' }}"
         uses: actions/checkout@v2
         with:
           repository: "thiskevinwang/${{ github.event.client_payload.repo }}"
@@ -19,7 +19,8 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: "14"
-      - run: npm install
+    - 
+      run: npm install
         working-directory: website
       - run: ls
       # - name: Sync branch
