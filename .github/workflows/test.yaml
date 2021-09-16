@@ -1,0 +1,29 @@
+name: Docs Sync Branch
+
+on:
+  repository_dispatch:
+    types:
+      - sync-branch
+      - sync-branch::*
+
+jobs:
+  sync-manifest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout: ${{ github.event.client_payload.repo }}"
+        uses: actions/checkout@v2
+        with:
+          repository: "thiskevinwang/${{ github.event.client_payload.repo }}"
+          ref: ${{ github.event.client_payload.ref }}
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+      - run: npm install
+        working-directory: website
+      - run: ls
+      # - name: Sync branch
+      #   npx -p @hashicorp/versioned-docs versioned-docs-sync ${{ github.event.client_payload.ref }} $GITHUB_SHA ${{ github.event.client_payload.repo }}
+      #   working-directory: website
+      - name: Echo
+        run: 'echo "payload: ${{ toJson(github.event.client_payload) }}"'
