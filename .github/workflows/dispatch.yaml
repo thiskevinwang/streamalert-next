@@ -18,11 +18,14 @@ jobs:
       - name: 'Checkout ${{ github.event.client_payload.foo }}'
         uses: actions/checkout@v1
       - run: 'echo foo: ${{ github.event.client_payload.foo }}'
+        # foo: 9000
       - run: 'echo list: ${{ github.event.client_payload.list }}'
-      - run: 'echo payload: ${{ toJson(github.event.client_payload) }}'
+        # list: Array
+      - run: 'echo payload: "${{ toJson(github.event.client_payload) }}"'
+        # errors without double quote: needs "${{}}"
       - name: Set Output
         run: |
-          echo "::set-output name=list::${{ fromJson(github.event.client_payload.list) }}"
+          echo "::set-output name=list::${{ github.event.client_payload.list }}"
       - name: Echo Output
         run: | # current job https://docs.github.com/en/actions/reference/context-and-expression-syntax-for-github-actions#contexts
           'echo ${{ job.outputs.list }}'
