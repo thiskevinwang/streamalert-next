@@ -12,39 +12,26 @@ on:
 jobs:
   say_hello:
     runs-on: ubuntu-latest
-
+    outputs:
+      matrix: ${{ steps.generate-matrix.outputs.matrix }}
       # list: ${{ fromJson(github.event.client_payload.list) }}
     steps:
-      - name: 'Checkout ${{ github.event.client_payload.foo }}'
-        uses: actions/checkout@v1
-      - run: 'echo foo: ${{ github.event.client_payload.foo }}'
-        # foo: 9000
-      - run: 'echo list: "${{ toJson(github.event.client_payload.list) }}"'
-        # list: Array
-      - run: 'echo payload: "${{ toJson(github.event.client_payload) }}"'
-        # errors without double quote: needs "${{}}"
-      - name: Set Output
-        id: set_output
+      # - name: 'Checkout ${{ github.event.client_payload.foo }}'
+      #   uses: actions/checkout@v1
+      # - run: 'echo foo: ${{ github.event.client_payload.foo }}'
+      # - run: 'echo list: "${{ toJson(github.event.client_payload.list) }}"'
+      # - run: 'echo payload: "${{ toJson(github.event.client_payload) }}"'
+      - name: Generate Matrix
+        id: generate-matrix
         run: |
-          echo "::set-output name=list::${{ toJson(github.event.client_payload.list) }}"
-    outputs:
-      output1: ${{ steps.set_output.outputs.list }}
-  # ---------------------------------------------------------------------
-  echo_things:
-    runs-on: ubuntu-latest
-    needs: say_hello
-    steps:
-      - run: 'echo ${{ needs.say_hello.outputs.output1 }}'
-      - run: 'echo "${{ fromJson(needs.say_hello.outputs.output1) }}"'
-      - run: 'echo "${{ toJson(needs.say_hello.outputs.output1) }}"'
-  # ---------------------------------------------------------------------
+          MATRIX_JSON="{\"projects\": ${MATRIX_PROJECTS_JSON}, \"include\": ${MATRIX_INCLUDE_JSON}}"
+          echo "::set-output name=matrix::${{ github.event.client_payload }}"
   my_matrix:
     runs-on: ubuntu-latest
     needs: 
       - say_hello
-      - echo_things
     strategy:
-    # Error when evaluating 'strategy' for job 'my_matrix'. (Line: 30, Col: 15): Unexpected value '["array", "of", "things"]'
-      matrix: ${{ fromJson(needs.say_hello.outputs.output1) }}
+      matrix: ${{ fromJson(needs.say_hello.outputs.matrix) }}
     steps:
       - run: echo ${{ matrix.display }}
+# https://github.com/frezbo/dockerfiles/blob/6701b8cffc3b3628ad72b541d2c36ac87e1e9b8f/.github/workflows/ci.yml
