@@ -24,11 +24,11 @@ jobs:
       - run: 'echo payload: "${{ toJson(github.event.client_payload) }}"'
         # errors without double quote: needs "${{}}"
       - name: Set Output
+        id: set_output
         run: |
           echo "::set-output name=list::${{ github.event.client_payload.list }}"
-      - name: Echo Output
-        run: | # current job https://docs.github.com/en/actions/reference/context-and-expression-syntax-for-github-actions#contexts
-          'echo "${{ job.outputs.list }}"'
+    outputs:
+      output1: ${{ steps.set_output.outputs.list }}
   my_matrix:
     runs-on: ubuntu-latest
     needs: say_hello
