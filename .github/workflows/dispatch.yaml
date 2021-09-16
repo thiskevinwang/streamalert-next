@@ -24,7 +24,6 @@ jobs:
           echo "::set-output name=list::${{ fromJson(github.event.client_payload.list) }}"
       - name: Echo Output
         run: |
-          'echo ${{ outputs.list }}'
           'echo ${{ say_hello.outputs.list }}'
   my_matrix:
     runs-on: ubuntu-latest
