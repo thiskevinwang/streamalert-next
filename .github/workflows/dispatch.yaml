@@ -12,20 +12,25 @@ on:
 jobs:
   say_hello:
     runs-on: ubuntu-latest
-    outputs:
-      list: '["array", "of", "things"]'
+
       # list: ${{ fromJson(github.event.client_payload.list) }}
     steps:
       - name: 'Checkout ${{ github.event.client_payload.foo }}'
         uses: actions/checkout@v1
       - run: 'echo "field: ${{ github.event.client_payload.foo }}"'
       - run: 'echo "payload: ${{ toJson(github.event.client_payload) }}"'
-      - run: echo baz
-        if: github.event.action == 'baz'
+      - name: Set Output
+        run: |
+          echo "::set-output name=list::${{ fromJson(github.event.client_payload.list) }}"
+      - name: Echo Output
+        run: |
+          'echo ${{ outputs.list }}'
+          'echo ${{ say_hello.outputs.list }}'
   my_matrix:
     runs-on: ubuntu-latest
     needs: say_hello
     strategy:
+    # Error when evaluating 'strategy' for job 'my_matrix'. (Line: 30, Col: 15): Unexpected value '["array", "of", "things"]'
       matrix:
         list: ${{ needs.say_hello.outputs.list }}
     steps:
