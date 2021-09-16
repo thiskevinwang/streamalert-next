@@ -26,7 +26,7 @@ jobs:
       - name: Set Output
         id: set_output
         run: |
-          echo "::set-output name=list::fromJson(${{ github.event.client_payload.list }})"
+          echo "::set-output name=list::${{ fromJson(github.event.client_payload.list) }}"
     outputs:
       output1: ${{ steps.set_output.outputs.list }}
   # ---------------------------------------------------------------------
@@ -35,8 +35,8 @@ jobs:
     needs: say_hello
     steps:
       - run: 'echo ${{ needs.say_hello.outputs.output1 }}'
-      - run: 'echo "${{ fromJson(needs.say_hello.outputs.output1) }}'
-      - run: 'echo "${{ toJson(needs.say_hello.outputs.output1) }}'
+      - run: 'echo "${{ fromJson(needs.say_hello.outputs.output1) }}"'
+      - run: 'echo "${{ toJson(needs.say_hello.outputs.output1) }}"'
   # ---------------------------------------------------------------------
   my_matrix:
     runs-on: ubuntu-latest
