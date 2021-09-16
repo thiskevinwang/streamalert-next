@@ -19,7 +19,7 @@ jobs:
         uses: actions/checkout@v1
       - run: 'echo foo: ${{ github.event.client_payload.foo }}'
         # foo: 9000
-      - run: 'echo list: ${{ toJson(github.event.client_payload.list) }}'
+      - run: 'echo list: "${{ toJson(github.event.client_payload.list) }}"'
         # list: Array
       - run: 'echo payload: "${{ toJson(github.event.client_payload) }}"'
         # errors without double quote: needs "${{}}"
