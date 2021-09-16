@@ -31,7 +31,7 @@ jobs:
     needs: 
       - say_hello
     strategy:
-      matrix: ${{ fromJson(needs.say_hello.outputs.matrix) }}
+      matrix: ${{ needs.say_hello.outputs.matrix }}
     steps:
       - run: echo ${{ matrix.display }}
 # https://github.com/frezbo/dockerfiles/blob/6701b8cffc3b3628ad72b541d2c36ac87e1e9b8f/.github/workflows/ci.yml
