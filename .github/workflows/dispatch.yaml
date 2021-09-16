@@ -17,8 +17,9 @@ jobs:
     steps:
       - name: 'Checkout ${{ github.event.client_payload.foo }}'
         uses: actions/checkout@v1
-      - run: 'echo "field: ${{ github.event.client_payload.foo }}"'
-      - run: 'echo "payload: ${{ toJson(github.event.client_payload) }}"'
+      - run: 'echo foo: ${{ github.event.client_payload.foo }}'
+      - run: 'echo list: ${{ github.event.client_payload.list }}'
+      - run: 'echo payload: ${{ toJson(github.event.client_payload) }}'
       - name: Set Output
         run: |
           echo "::set-output name=list::${{ fromJson(github.event.client_payload.list) }}"
