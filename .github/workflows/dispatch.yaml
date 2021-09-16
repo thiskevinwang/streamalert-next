@@ -25,13 +25,13 @@ jobs:
         id: generate-matrix
         run: |
           MATRIX_JSON="{\"projects\": ${MATRIX_PROJECTS_JSON}, \"include\": ${MATRIX_INCLUDE_JSON}}"
-          echo "::set-output name=matrix::${{ toJson(github.event.client_payload) }}"
+          echo "::set-output name=matrix::${{ github.event.client_payload }}"
   my_matrix:
     runs-on: ubuntu-latest
     needs: 
       - say_hello
     strategy:
-      matrix: ${{ needs.say_hello.outputs.matrix }}
+      matrix: ${{ fromJson(needs.say_hello.outputs.matrix) }}
     steps:
       - run: echo ${{ matrix.display }}
 # https://github.com/frezbo/dockerfiles/blob/6701b8cffc3b3628ad72b541d2c36ac87e1e9b8f/.github/workflows/ci.yml
