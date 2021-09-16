@@ -34,7 +34,6 @@ jobs:
     needs: say_hello
     strategy:
     # Error when evaluating 'strategy' for job 'my_matrix'. (Line: 30, Col: 15): Unexpected value '["array", "of", "things"]'
-      matrix:
-        list: ${{ fromJson(needs.say_hello.outputs.output1) }}
+      matrix: ${{ fromJson(needs.say_hello.outputs.output1) }}
     steps:
       - run: echo ${{ matrix.display }}
