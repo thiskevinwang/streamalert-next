@@ -26,7 +26,7 @@ jobs:
       - name: Set Output
         id: set_output
         run: |
-          echo "::set-output name=list::${{ toJson(github.event.client_payload.list) }}"
+          echo "::set-output name=list::${{ github.event.client_payload.list }}"
     outputs:
       output1: ${{ steps.set_output.outputs.list }}
   my_matrix:
