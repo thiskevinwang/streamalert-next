@@ -13,8 +13,7 @@ jobs:
   say_hello:
     runs-on: ubuntu-latest
     outputs:
-      matrix: ${{ steps.generate-matrix.outputs.matrix }}
-      # list: ${{ fromJson(github.event.client_payload.list) }}
+      services: ${{ steps.generate-matrix.outputs.services }}
     steps:
       # - name: 'Checkout ${{ github.event.client_payload.foo }}'
       #   uses: actions/checkout@v1
@@ -25,13 +24,16 @@ jobs:
         id: generate-matrix
         run: |
           MATRIX_JSON="{\"projects\": ${MATRIX_PROJECTS_JSON}, \"include\": ${MATRIX_INCLUDE_JSON}}"
-          echo "::set-output name=matrix::${{ github.event.client_payload }}"
+          echo "::set-output name=services::${{ toJson(github.event.client_payload.services) }}"
   my_matrix:
     runs-on: ubuntu-latest
     needs: 
       - say_hello
     strategy:
-      matrix: ${{ fromJson(needs.say_hello.outputs.matrix) }}
+      matrix:
+        service: ${{ fromJson(needs.say_hello.outputs.services) }}
     steps:
-      - run: echo ${{ matrix.display }}
-# https://github.com/frezbo/dockerfiles/blob/6701b8cffc3b3628ad72b541d2c36ac87e1e9b8f/.github/workflows/ci.yml
+      - uses: actions/checkout@v2
+      - name: test service (${{ matrix.service }})
+        run: |
+          echo "${{ matrix.service }}"
