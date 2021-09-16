@@ -5,7 +5,8 @@ on:
     types:
       - sync-branch
       - sync-branch::*
-
+      - release-ref-change
+      - release-ref-change::*
 jobs:
   sync-manifest:
     runs-on: ubuntu-latest
