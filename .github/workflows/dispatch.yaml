@@ -19,7 +19,7 @@ jobs:
       - name: Generate Matrix
         id: generate-matrix
         run: |
-          echo ::set-output name=services::${{ github.event.client_payload.services }}
+          echo ::set-output name=services::toJSON(github.event.client_payload.services)
         # run: |
         #   echo "::set-output name=services::${{ toJSON(github.event.client_payload.services) }}"
       - name: Echo (github.event.client_payload.services)
