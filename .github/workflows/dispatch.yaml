@@ -10,30 +10,27 @@ on:
       - 'manifest-change::*'
 
 jobs:
+  # ------------------------
   say_hello:
     runs-on: ubuntu-latest
     outputs:
       services: ${{ steps.generate-matrix.outputs.services }}
     steps:
-      # - name: 'Checkout ${{ github.event.client_payload.foo }}'
-      #   uses: actions/checkout@v1
-      # - run: 'echo foo: ${{ github.event.client_payload.foo }}'
-      # - run: 'echo list: "${{ toJson(github.event.client_payload.list) }}"'
-      # - run: 'echo payload: "${{ toJson(github.event.client_payload) }}"'
       - name: Generate Matrix
         id: generate-matrix
         run: |
-          MATRIX_JSON="{\"projects\": ${MATRIX_PROJECTS_JSON}, \"include\": ${MATRIX_INCLUDE_JSON}}"
           echo "::set-output name=services::${{ toJson(github.event.client_payload.services) }}"
+  # ------------------------
   my_matrix:
     runs-on: ubuntu-latest
     needs: 
       - say_hello
     strategy:
       matrix:
-        service: ${{ fromJson(needs.say_hello.outputs.services) }}
+        # service: ${{ fromJson(needs.say_hello.outputs.services) }}
+        service: ${{ github.event.client_payload.services }}
     steps:
-      - uses: actions/checkout@v2
+      # - uses: actions/checkout@v2
       - name: test service (${{ matrix.service }})
         run: |
           echo "${{ matrix.service }}"
