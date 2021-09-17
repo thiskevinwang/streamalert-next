@@ -16,10 +16,12 @@ jobs:
     outputs:
       services: ${{ steps.generate-matrix.outputs.services }}
     steps:
+      - name: Echo (job)
+        run: echo "${{ toJSON(job) }}"
       - name: Generate Matrix
         id: generate-matrix
         run: |
-          echo "::set-output name=services::${{ toJson(github.event.client_payload.services) }}"
+          echo "::set-output name=services::${{ toJSON(github.event.client_payload.services) }}"
   # ------------------------
   my_matrix:
     runs-on: ubuntu-latest
@@ -27,8 +29,8 @@ jobs:
       - say_hello
     strategy:
       matrix:
-        # service: ${{ fromJson(needs.say_hello.outputs.services) }}
-        service: ${{ github.event.client_payload.services }}
+        service: ${{ fromJSON(needs.say_hello.outputs.services) }}
+        # service: ${{ github.event.client_payload.services }}
     steps:
       # - uses: actions/checkout@v2
       - name: test service (${{ matrix.service }})
