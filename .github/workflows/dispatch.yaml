@@ -16,12 +16,12 @@ jobs:
     outputs:
       services: ${{ steps.generate-matrix.outputs.services }}
     steps:
-      - name: Echo (job)
-        run: echo "${{ toJSON(job) }}"
       - name: Generate Matrix
         id: generate-matrix
         run: |
           echo "::set-output name=services::${{ toJSON(github.event.client_payload.services) }}"
+      - name: Echo (job)
+        run: echo "${{ toJSON(job) }}"
   # ------------------------
   my_matrix:
     runs-on: ubuntu-latest
