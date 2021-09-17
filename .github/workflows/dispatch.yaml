@@ -19,7 +19,7 @@ jobs:
       - name: Generate Matrix
         id: generate-matrix
         run: |
-          echo "::set-output name=services::${{ toJSON(github.event.client_payload.services) }}"
+          echo "::set-output name=services::${{ github.event.client_payload.services }}"
       - name: Echo (job)
         run: echo "${{ toJSON(job) }}" # prints { status: success }
       - name: Echo (job.outputs)
@@ -32,6 +32,10 @@ jobs:
     steps:
       - name: Echo previous outputs
         run: echo "${{ toJSON(needs.say_hello.outputs) }}"
+        # This is with toJSON(github.event.client_payload.services)
+        # echo "{
+        #   "services": "["
+        # }"
   # ------------------------
   my_matrix:
     runs-on: ubuntu-latest
