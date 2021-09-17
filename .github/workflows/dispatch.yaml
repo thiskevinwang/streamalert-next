@@ -19,11 +19,9 @@ jobs:
       - name: Generate Matrix
         id: generate-matrix
         run: |
-          echo "::set-output name=services::${{ fromJSON(github.event.client_payload.services) }}"
-      - name: Echo (job)
-        run: echo "${{ toJSON(job) }}" # prints { status: success }
-      - name: Echo (job.outputs)
-        run: echo "${{ toJSON(job.outputs) }}" # prints null
+          echo "::set-output name=services::${{ toJSON(github.event.client_payload.services) }}"
+      - name: Echo (github.event.client_payload.services)
+        run: echo "${{ github.event.client_payload.services }}"
   # ------------------------
   my_echo:
     runs-on: ubuntu-latest
@@ -41,6 +39,8 @@ jobs:
         # echo "{
         #   "services": "Array"
         # }"
+        # -------
+        # CRASH with fromJSON()
   # ------------------------
   my_matrix:
     runs-on: ubuntu-latest
