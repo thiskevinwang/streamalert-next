@@ -21,13 +21,22 @@ jobs:
         run: |
           echo "::set-output name=services::${{ toJSON(github.event.client_payload.services) }}"
       - name: Echo (job)
-        run: echo "${{ toJSON(job) }}"
+        run: echo "${{ toJSON(job) }}" # prints { status: success }
       - name: Echo (job.outputs)
-        run: echo "${{ toJSON(job.outputs) }}"
+        run: echo "${{ toJSON(job.outputs) }}" # prints null
+  # ------------------------
+  my_echo:
+    runs-on: ubuntu-latest
+    needs: 
+      - say_hello
+    steps:
+      - name: Echo previous outputs
+        run: echo "${{ toJSON(needs.say_hello.outputs) }}"
   # ------------------------
   my_matrix:
     runs-on: ubuntu-latest
     needs: 
+      - my_echo
       - say_hello
     strategy:
       matrix:
