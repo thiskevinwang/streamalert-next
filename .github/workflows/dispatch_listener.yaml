@@ -47,8 +47,8 @@ jobs:
       - say_hello
     strategy:
       matrix:
-        service: ${{ needs.say_hello.outputs.services }}
-        version: ${{ needs.say_hello.outputs.versions }}
+        service: ${{ fromJSON(needs.say_hello.outputs.services) }}
+        version: ${{ fromJSON(needs.say_hello.outputs.versions) }}
         # service: ${{ github.event.client_payload.services }} # works
     steps:
       # - uses: actions/checkout@v2
