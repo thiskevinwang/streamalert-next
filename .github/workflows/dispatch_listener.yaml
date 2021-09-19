@@ -1,13 +1,10 @@
-name: Dispatch
+name: Dispatch Listener
 
 on:
   repository_dispatch:
     types: 
-      - dispatch_foo
-      - dispatch_bar
-      - 'manifest-change::Waypoint'
-      - 'manifest-change::Terraform'
-      - 'manifest-change::*'
+      - 'test run'
+      - 'test::*'
 
 jobs:
   # ------------------------
