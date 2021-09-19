@@ -27,7 +27,7 @@ jobs:
       - name: Generate Matrix
         id: generate-matrix
         run: |
-          SERVICES="${{ toJSON(github.event.client_payload.services) }}"
+          SERVICES="'"${{ toJSON(github.event.client_payload.services) }}"'"
           echo "${SERVICES}"
           echo ::set-output name=services::"'"${SERVICES}"'"
         # run: |
@@ -38,8 +38,10 @@ jobs:
     needs: 
       - say_hello
     steps:
-      - name: Echo previous outputs
+      - name: Echo previous toJSON(outputs)
         run: echo "${{ toJSON(needs.say_hello.outputs) }}"
+      - name: Echo previous outputs
+        run: echo "${{ needs.say_hello.outputs }}"
         # This is with toJSON(github.event.client_payload.services)
         # echo "{
         #   "services": "["
