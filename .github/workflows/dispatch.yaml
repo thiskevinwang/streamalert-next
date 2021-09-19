@@ -29,7 +29,7 @@ jobs:
         run: |
           SERVICES='${{ toJSON(github.event.client_payload.services) }}'
           echo "${SERVICES}"
-          echo ::set-output name=services::'${{ toJSON(github.event.client_payload.services) }}'
+          echo ::set-output name=services::${SERVICES}
         # run: |
         #   echo "::set-output name=services::${{ toJSON(github.event.client_payload.services) }}"
   # ------------------------
