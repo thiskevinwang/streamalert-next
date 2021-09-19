@@ -17,11 +17,13 @@ jobs:
       services: ${{ steps.generate-matrix.outputs.services }}
     steps:
       - name: Echo (github.event.client_payload)
-        run: echo "${{ github.event.client_payload }}"
+        run: echo "${{ github.event.client_payload }}" # echo "object"
       - name: Echo toJSON(github.event.client_payload)
-        run: echo "${{ toJSON(github.event.client_payload) }}"
+        run: echo "${{ toJSON(github.event.client_payload) }}" # works?
       - name: Echo (github.event.client_payload.services)
         run: echo "${{ github.event.client_payload.services }}" # echo "Array"
+      - name: Echo toJSON(github.event.client_payload.services)
+        run: echo "${{ toJSON(github.event.client_payload.services) }}" # echo "Array"
       - name: Generate Matrix
         id: generate-matrix
         run: |
