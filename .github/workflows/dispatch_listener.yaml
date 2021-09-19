@@ -14,14 +14,14 @@ jobs:
       services: ${{ steps.generate-matrix.outputs.services }}
       versions: ${{ steps.generate-matrix.outputs.versions }}
     steps:
-      - name: Echo (github.event.client_payload)
-        run: echo "${{ github.event.client_payload }}" # echo "object"
-      - name: Echo toJSON(github.event.client_payload)
-        run: echo "${{ toJSON(github.event.client_payload) }}" # echoes whole payload
-      - name: Echo (github.event.client_payload.services)
-        run: echo "${{ github.event.client_payload.services }}" # echo "Array"
-      - name: Echo toJSON(github.event.client_payload.services)
-        run: echo "${{ toJSON(github.event.client_payload.services) }}" # echoes array
+      # - name: Echo (github.event.client_payload)
+      #   run: echo "${{ github.event.client_payload }}" # echo "object"
+      # - name: Echo toJSON(github.event.client_payload)
+      #   run: echo "${{ toJSON(github.event.client_payload) }}" # echoes whole payload
+      # - name: Echo (github.event.client_payload.services)
+      #   run: echo "${{ github.event.client_payload.services }}" # echo "Array"
+      # - name: Echo toJSON(github.event.client_payload.services)
+      #   run: echo "${{ toJSON(github.event.client_payload.services) }}" # echoes array
       - name: Generate Matrix
         id: generate-matrix
         run: |
@@ -47,12 +47,12 @@ jobs:
       - say_hello
     strategy:
       matrix:
-        service: ${{ fromJSON(needs.say_hello.outputs.services) }}
-        version: ${{ fromJSON(needs.say_hello.outputs.versions) }}
+        service: ${{ needs.say_hello.outputs.services }}
+        version: ${{ needs.say_hello.outputs.versions }}
         # service: ${{ github.event.client_payload.services }} # works
     steps:
       # - uses: actions/checkout@v2
       - name: Matrix => (${{ matrix.service }} ${{ matrix.version}})
         run: |
-          echo "${{ matrix.service }}"
-          echo "${{ matrix.version }}"
+          echo ${{ matrix.service }}
+          echo ${{ matrix.version }}
