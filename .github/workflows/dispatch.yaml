@@ -21,7 +21,7 @@ jobs:
       - name: Generate Matrix
         id: generate-matrix
         run: |
-          SERVICES=${{{ github.event.client_payload.services }}}
+          SERVICES=${{ github.event.client_payload.services }}
           echo "${SERVICES}"
           echo "::set-output name=services::${SERVICES}"
         # run: |
