@@ -15,6 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       services: ${{ steps.generate-matrix.outputs.services }}
+      versions: ${{ steps.generate-matrix.outputs.versions }}
     steps:
       - name: Echo (github.event.client_payload)
         run: echo "${{ github.event.client_payload }}" # echo "object"
@@ -30,8 +31,9 @@ jobs:
           SERVICES='${{ toJSON(github.event.client_payload.services) }}'
           echo "${SERVICES}"
           echo ::set-output name=services::${SERVICES}
-        # run: |
-        #   echo "::set-output name=services::${{ toJSON(github.event.client_payload.services) }}"
+          VERSIONS='${{ toJSON(github.event.client_payload.versions) }}'
+          echo "${VERSIONS}"
+          echo ::set-output name=versions::${VERSIONS}
   # ------------------------
   my_echo:
     runs-on: ubuntu-latest
@@ -40,17 +42,6 @@ jobs:
     steps:
       - name: Echo previous outputs
         run: echo "${{ toJSON(needs.say_hello.outputs) }}"
-        # This is with toJSON(github.event.client_payload.services)
-        # echo "{
-        #   "services": "["
-        # }"
-        # -------
-        # This is with no helper ± github.event.client_payload.services
-        # echo "{
-        #   "services": "Array"
-        # }"
-        # -------
-        # CRASH with fromJSON()
   # ------------------------
   my_matrix:
     runs-on: ubuntu-latest
@@ -60,9 +51,11 @@ jobs:
     strategy:
       matrix:
         service: ${{ fromJSON(needs.say_hello.outputs.services) }}
-        # service: ${{ github.event.client_payload.services }}
+        version: ${{ fromJSON(needs.say_hello.outputs.versions) }}
+        # service: ${{ github.event.client_payload.services }} # works
     steps:
       # - uses: actions/checkout@v2
-      - name: test service (${{ matrix.service }})
+      - name: Matrix => (${{ matrix.service }} ${{ matrix.version}})
         run: |
           echo "${{ matrix.service }}"
+          echo "${{ matrix.version }}"
