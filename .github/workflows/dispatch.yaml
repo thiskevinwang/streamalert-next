@@ -16,14 +16,16 @@ jobs:
     outputs:
       services: ${{ steps.generate-matrix.outputs.services }}
     steps:
+      - name: Echo (github.event.client_payload.services)
+        run: echo "${{ github.event.client_payload.services }}"
       - name: Generate Matrix
         id: generate-matrix
         run: |
-          echo ::set-output name=services::toJSON(github.event.client_payload.services)
+          SERVICES=${{{ github.event.client_payload.services }}}
+          echo "${SERVICES}"
+          echo "::set-output name=services::${SERVICES}"
         # run: |
         #   echo "::set-output name=services::${{ toJSON(github.event.client_payload.services) }}"
-      - name: Echo (github.event.client_payload.services)
-        run: echo "${{ github.event.client_payload.services }}"
   # ------------------------
   my_echo:
     runs-on: ubuntu-latest
