@@ -28,8 +28,8 @@ jobs:
         id: generate-matrix
         run: |
           SERVICES="${{ toJSON(github.event.client_payload.services) }}"
-          echo "${SERVICES}"
-          echo "::set-output name=services::${SERVICES}"
+          echo "toJSON(${SERVICES})"
+          echo "::set-output name=services::"'"${SERVICES}"'""
         # run: |
         #   echo "::set-output name=services::${{ toJSON(github.event.client_payload.services) }}"
   # ------------------------
