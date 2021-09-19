@@ -18,6 +18,8 @@ jobs:
     steps:
       - name: Echo (github.event.client_payload)
         run: echo "${{ github.event.client_payload }}"
+      - name: Echo toJSON(github.event.client_payload)
+        run: echo "${{ toJSON(github.event.client_payload) }}"
       - name: Echo (github.event.client_payload.services)
         run: echo "${{ github.event.client_payload.services }}" # echo "Array"
       - name: Generate Matrix
